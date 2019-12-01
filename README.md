@@ -1,8 +1,8 @@
 # GSDDDOSS (GoldSource Denied Distributed Denial of Service Script)
 GSDDDOSS is a simple python script that monitors your goldsrc/svengine game server's udp log output for the following attacks:
-Bad Rcon
-Split Packets
-A2S abuse / Reflected DDoS
+Bad Rcon,
+Split Packets,
+and A2S abuse / Reflected DDoS
 
 Any ip associated with any of these attacks will be automagically blocked in the firewall.
 
