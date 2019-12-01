@@ -6,7 +6,7 @@ A2S abuse / Reflected DDoS
 
 Any ip associated with any of these attacks will be automagically blocked in the firewall.
 
-(blame H? for the name :P)
+(blame H2 for the name :P)
 
 If you find a bug, or have improved on the script - feel free to make a pull request!
 
