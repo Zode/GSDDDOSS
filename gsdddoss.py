@@ -1,4 +1,6 @@
 import sys, os
+import datetime
+
 isLinux = False
 if sys.platform == "linux" or sys.platform == "linux2":
 	isLinux = True
@@ -113,15 +115,24 @@ for data in udp_server():
 					
 				if(counted <= 1 and len(iplist[ret.ip]) > 12):
 					print("Popping: {} (most likely valid person spamming browser refresh)".format(ret.ip))
+					future = datetime.datetime.utcnow() + datetime.timedelta(seconds=240)
+					future = future.replace(tzinfo=datetime.timezone.utc).timestamp()
+					
 					if ret.ip in hotlist:
 						hotlist[ret.ip].append(ret.port)
+						timenow = datetime.datetime.utcnow()
+						for hottime in hotlist[ret.ip][:]:
+							timethen = datetime.datetime.utcfromtimestamp(hottime)
+							if(timethen < timenow):
+								hotlist.remove(hottime)
+						
 						if len(hotlist[ret.ip]) > 3:
 							print("Found a naughty ip: {} (rate limit, port blasting)".format(ret.ip))
 							hotlist.pop(ret.ip)
 							blockip(ret.ip)
 					else:
 						hotlist[ret.ip] = []
-						hotlist[ret.ip].append(ret.port)
+						hotlist[ret.ip].append(future)
 						
 					iplist.pop(ret.ip)
 			else:
