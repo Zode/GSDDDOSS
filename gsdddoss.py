@@ -75,6 +75,7 @@ def blockip(ip): #Make one rule per IP, used to group IPs in windows but it quic
 
 main_config = config_load("ips")
 iplist = {}
+hotlist = {}
 
 def count_ports(input, match):
 	ret = 0
@@ -105,9 +106,23 @@ for data in udp_server():
 				if(counted >= 3):
 					print("Found a naughty ip: {} (rate limit, repeating port was: {})".format(ret.ip, ret.port))
 					blockip(ret.ip)
+					if ret.ip in hotlist:
+						hotlist.pop(ret.ip)
+						
 					iplist.pop(ret.ip)
+					
 				if(counted <= 1 and len(iplist[ret.ip]) > 12):
 					print("Popping: {} (most likely valid person spamming browser refresh)".format(ret.ip))
+					if ret.ip in hotlist:
+						hotlist[ret.ip].append(ret.port)
+						if len(hotlist[ret.ip]) > 12:
+							print("Found a naughty ip: {} (rate limit, port blasting)".format(ret.ip))
+							hotlist.pop(ret.ip)
+							blockip(ret.ip)
+					else:
+						hotlist[ret.ip] = []
+						hotlist[ret.ip].append(ret.port)
+						
 					iplist.pop(ret.ip)
 			else:
 				iplist[ret.ip] = []
