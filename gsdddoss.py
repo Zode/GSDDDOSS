@@ -115,7 +115,7 @@ for data in udp_server():
 					print("Popping: {} (most likely valid person spamming browser refresh)".format(ret.ip))
 					if ret.ip in hotlist:
 						hotlist[ret.ip].append(ret.port)
-						if len(hotlist[ret.ip]) > 12:
+						if len(hotlist[ret.ip]) > 3:
 							print("Found a naughty ip: {} (rate limit, port blasting)".format(ret.ip))
 							hotlist.pop(ret.ip)
 							blockip(ret.ip)
